@@ -97,6 +97,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<finalName>spring-manage-user</finalName>
 	</build>
 
 </project>
