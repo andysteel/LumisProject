@@ -1,6 +1,9 @@
 name: Docker
 
 on:
+  watch:
+    types: [started]
+    
   push:
     # Publish `master` as Docker `latest` image.
     branches:
@@ -42,7 +45,7 @@ jobs:
     needs: test
 
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' || github.actor == github.event.repository.owner.login
 
     steps:
       - uses: actions/checkout@v2
