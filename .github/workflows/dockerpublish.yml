@@ -69,12 +69,11 @@ jobs:
       - name: Build with Maven
         run: mvn -B package --file pom.xml
 
-      - name: Login into registry
+      - name: Login into docker hub
+        uses: actions-hub/docker/login@master
         env:
           DOCKER_USER: andysteel   
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}  
-        run: |
-          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
         #run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
 
       - name: Build image
