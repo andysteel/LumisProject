@@ -81,13 +81,6 @@ jobs:
         run: docker build . --file Dockerfile --tag $IMAGE_NAME
       
       - name: Push image
-        run: |
-          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
-          [ "$VERSION" == "master" ] && VERSION=latest
-
-          echo IMAGE_ID=$IMAGE_ID/$IMAGE_NAME
-          echo VERSION=$VERSION
-
-          docker tag image $IMAGE_ID/$IMAGE_NAME:$VERSION
-          docker push $IMAGE_ID/$IMAGE_NAME:$VERSION
+        uses: actions-hub/docker@master
+        with:
+          args: docker push $IMAGE_ID/$IMAGE_NAME:${IMAGE_TAG}
