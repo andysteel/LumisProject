@@ -45,8 +45,8 @@ jobs:
           DOCKER_USER: andysteel
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
-        # docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.io -u ${{ github.actor }} --password-stdin
+        # docker login docker.io -u $DOCKER_USER -p $DOCKER_PASSWORD
       - name: Set Version
         run: echo ::set-env name=VERSION::${GITHUB_REF#refs/*/}
         
