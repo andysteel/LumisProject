@@ -19,6 +19,7 @@ on:
 env:
   # TODO: Change variable to your image's name.
   IMAGE_NAME: spring-manage-user
+  IMAGE_ID: andysteel  
 
 jobs:
   # Run tests.
@@ -85,9 +86,8 @@ jobs:
           [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
           [ "$VERSION" == "master" ] && VERSION=latest
 
-          echo GITHUB=${{ github.actor }}
-          echo IMAGE_ID=${{ secrets.DOCKER_USER }}/$IMAGE_NAME
+          echo IMAGE_ID=$IMAGE_ID/$IMAGE_NAME
           echo VERSION=$VERSION
 
-          docker tag image ${{ secrets.DOCKER_USER }}/$IMAGE_NAME:$VERSION
-          docker push ${{ secrets.DOCKER_USER }}/$IMAGE_NAME:$VERSION
+          docker tag image $IMAGE_ID/$IMAGE_NAME:$VERSION
+          docker push $IMAGE_ID/$IMAGE_NAME:$VERSION
