@@ -52,7 +52,7 @@ jobs:
   # See also https://docs.docker.com/docker-hub/builds/
   push:
     # Ensure test job passes before pushing image.
-    needs: test
+    # needs: test
 
     runs-on: ubuntu-latest
     if: github.event_name == 'push' || github.actor == github.event.repository.owner.login
@@ -70,16 +70,24 @@ jobs:
         run: mvn -B package --file pom.xml
 
       - name: Login into docker hub
-        uses: actions-hub/docker/login@master
         env:
-          DOCKER_USER: andysteel   
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}  
+          DOCKER_USER: andysteel
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD:  
         #run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
 
       - name: Build image
         run: docker build . --file Dockerfile --tag $IMAGE_NAME
       
       - name: Push image
-        uses: actions-hub/docker@master
-        with:
-          args: docker push $IMAGE_ID/$IMAGE_NAME:${IMAGE_TAG}
+        run: |
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          [ "$VERSION" == "master" ] && VERSION=latest
+          
+          echo IMAGE_ID=$IMAGE_ID/$IMAGE_NAME
+          echo VERSION=$VERSION
+          
+          docker tag image $IMAGE_ID/$IMAGE_NAME:$VERSION
+          docker push $IMAGE_ID/$IMAGE_NAME:$VERSION
