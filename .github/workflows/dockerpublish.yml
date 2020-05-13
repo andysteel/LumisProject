@@ -11,7 +11,7 @@ on:
 
     # Publish `v1.2.3` tags as releases.
     tags:
-      - v*
+      - 'v*'
 
   # Run tests for any PRs.
   pull_request:
@@ -20,7 +20,7 @@ env:
   # TODO: Change variable to your image's name.
   IMAGE_NAME: spring-manage-user
   IMAGE_ID: andysteel  
-  VERSION: ${IMAGE_TAG}
+  VERSION: ${{ github.ref }}
 
 jobs:
 
@@ -53,9 +53,9 @@ jobs:
         run: docker build . --file Dockerfile --tag $IMAGE_NAME
       
       - name: Push image
-        run: |
-          echo IMAGE_ID=$IMAGE_ID/$IMAGE_NAME
-          echo VERSION=$VERSION
-          
+        run: |        
           docker tag image $IMAGE_ID/$IMAGE_NAME:$VERSION
           docker push $IMAGE_ID/$IMAGE_NAME:$VERSION
+          
+          echo IMAGE_ID=$IMAGE_ID/$IMAGE_NAME
+          echo VERSION=$VERSION
