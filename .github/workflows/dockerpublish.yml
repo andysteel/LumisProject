@@ -59,7 +59,8 @@ jobs:
             VERSION=latest
           fi
           
-          docker push $IMAGE_ID/$IMAGE_NAME:$VERSION
-          
           echo IMAGE_ID=$IMAGE_ID/$IMAGE_NAME
           echo VERSION=$VERSION
+          
+          docker push docker.io/$IMAGE_ID/$IMAGE_NAME:$VERSION
+          
