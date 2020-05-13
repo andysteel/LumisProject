@@ -56,8 +56,9 @@ jobs:
       - name: Push image
         run: |        
           if [ $VERSION == 'master' ]; then
-            $VERSION=latest
+            VERSION=latest
           fi
+          
           docker push $IMAGE_ID/$IMAGE_NAME:$VERSION
           
           echo IMAGE_ID=$IMAGE_ID/$IMAGE_NAME
