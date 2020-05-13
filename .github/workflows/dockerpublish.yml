@@ -51,7 +51,12 @@ jobs:
         run: echo ::set-env name=VERSION::${GITHUB_REF#refs/*/}
         
       - name: Build image
-        run: docker build . --file Dockerfile --tag $IMAGE_NAME
+        run: |
+           if [ $VERSION == 'master' ]; then
+            VERSION=latest
+           fi
+           
+           docker build . --file Dockerfile --tag $IMAGE_ID/$IMAGE_NAME:$VERSION
       
       - name: Push image
         run: |        
@@ -62,5 +67,5 @@ jobs:
           echo IMAGE_ID=$IMAGE_ID/$IMAGE_NAME
           echo VERSION=$VERSION
           
-          docker push docker.io/$IMAGE_ID/$IMAGE_NAME:$VERSION
+          docker push $IMAGE_ID/$IMAGE_NAME:$VERSION
           
