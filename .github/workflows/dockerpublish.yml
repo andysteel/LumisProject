@@ -57,7 +57,6 @@ jobs:
           [[ "${{ github.ref }}" == "refs/tags/"* ]] && $VERSION=$( $VERSION | sed -e 's/^v//')
           [ "$VERSION" == "master" ] && VERSION=latest
           
-          docker tag image $IMAGE_ID/$IMAGE_NAME:$VERSION
           docker push $IMAGE_ID/$IMAGE_NAME:$VERSION
           
           echo IMAGE_ID=$IMAGE_ID/$IMAGE_NAME
