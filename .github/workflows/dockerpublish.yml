@@ -20,7 +20,6 @@ env:
   # TODO: Change variable to your image's name.
   IMAGE_NAME: spring-manage-user
   IMAGE_ID: andysteel  
-  VERSION: echo "${{ github.ref }}" | sed 's,.*/\(.*\),\1,'
 
 jobs:
 
@@ -48,15 +47,17 @@ jobs:
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
         # docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-
+      - name: Set Version
+        run: echo ::set-env name=VERSION::${GITHUB_REF#refs/*/}
+        
       - name: Build image
         run: docker build . --file Dockerfile --tag $IMAGE_NAME
       
       - name: Push image
         run: |        
-          [[ "${{ github.ref }}" == "refs/tags/"* ]] && $VERSION=echo $VERSION | sed 's/^v//'
-          [ "$VERSION" == "master" ] && VERSION=latest
-          
+          if [ $VERSION == 'master' ]; then
+            $VERSION=latest
+          fi
           docker push $IMAGE_ID/$IMAGE_NAME:$VERSION
           
           echo IMAGE_ID=$IMAGE_ID/$IMAGE_NAME
