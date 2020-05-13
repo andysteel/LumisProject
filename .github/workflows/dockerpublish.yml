@@ -74,8 +74,8 @@ jobs:
           DOCKER_USER: andysteel
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
-          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD:  
-        #run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+        # docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
 
       - name: Build image
         run: docker build . --file Dockerfile --tag $IMAGE_NAME
